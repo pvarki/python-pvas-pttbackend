@@ -3,10 +3,9 @@ name = "pttbackend"
 version = "0.1.0"
 description = "Keeps track of mumble instances ordered by people in different contexts"
 authors = ["Eero af Heurlin <eero.afheurlin@iki.fi>"]
-# FIXME: Doublecheck these values
-#homepage = "https://gitlab.com/advian-oss/python-pvas-pttbackend/"
-#repository = "https://gitlab.com/advian-oss/python-pvas-pttbackend/"
-#license = "FIXME"
+homepage = "https://gitlab.com/PVARKI-projekti/python-pvas-pttbackend/"
+repository = "https://gitlab.com/PVARKI-projekti/python-pvas-pttbackend/"
+license = "MIT"
 readme = "README.rst"
 
 [tool.poetry.scripts]
