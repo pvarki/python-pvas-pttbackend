@@ -31,7 +31,6 @@ repos:
     hooks:
     -   id: mypy
         language: system
-        args: [--strict] #, --ignore-missing-imports]
 -   repo: https://github.com/pycqa/pylint
     rev: v2.13.4
     hooks:
@@ -58,5 +57,5 @@ repos:
     hooks:
     -   id: detect-secrets
         language: system
-        exclude: "poetry.lock"
+        exclude: "poetry.lock|data/jwtRS256.key|data/jwtRS256.pub|dotenv.example|docker-compose_.*.yml"
         # args: ['--baseline', '.secrets.baseline']

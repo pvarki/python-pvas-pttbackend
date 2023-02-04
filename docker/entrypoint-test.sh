@@ -10,8 +10,9 @@ if [ "$#" -eq 0 ]; then
   pre-commit run --all-files
   # Then run the tests
   pytest --junitxml=pytest.xml tests/
-  mypy --strict src tests
-  bandit --skip=B101 -r src
+  # pre-commit already deals with mypy and bandit
+  #mypy src tests
+  #bandit --skip=B101 -r src
 else
   exec "$@"
 fi

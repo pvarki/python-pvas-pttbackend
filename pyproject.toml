@@ -38,6 +38,21 @@ junit_family="xunit2"
 addopts="--cov=pttbackend --cov-fail-under=65 --cov-branch"
 asyncio_mode="strict"
 
+[tool.mypy]
+strict=true
+
+[[tool.mypy.overrides]]
+module="pttbackend.models.*"  # Gino isn't properly typed yet
+disallow_subclassing_any=false
+
+[[tool.mypy.overrides]]
+module="pttbackend.schemas.*"  # pydantic_collections has issues
+disallow_subclassing_any=false
+
+[[tool.mypy.overrides]]
+module="alembic.*"  # alembic generated stuff is all weird to mypy
+ignore_errors = true
+
 [tool.pylint.format]
 max-line-length = 120
 
@@ -76,6 +91,8 @@ pydantic = { version="^1.10", extras=["email"] }
 pydantic-collections = ">=0.4,<1.0"  # caret behaviour on 0.x is to lock to 0.x.*
 alembic = { version="^1.9", optional=true }
 psycopg2 = { version="^2.9", optional=true }
+azure-identity = "^1.12"
+azure-keyvault-secrets = "^4.6"
 
 [tool.poetry.extras]
 migrations = ["alembic", "psycopg2"]
