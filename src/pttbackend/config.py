@@ -8,8 +8,10 @@ cfg = Config(".env")
 STATIC_PATH: Path = cfg("STATIC_PATH", cast=Path, default=Path(__file__).parent / "staticfiles")
 TEMPLATES_PATH: Path = cfg("TEMPLATES_PATH", cast=Path, default=Path(__file__).parent / "templates")
 LOG_LEVEL: int = cfg("LOG_LEVEL", default=20, cast=int)
-SPINUP_PIPELINE_URL: str = cfg("SPINUP_PIPELINE_URL", default="https://up.example.com")
-SPINDOWN_PIPELINE_URL: str = cfg("SPINDOWN_PIPELINE_URL", default="https://down.example.com")
+PIPELINE_URL: str = cfg(
+    "PIPELINE_URL", default="https://dev.azure.com/pvarki/PVARKI/_apis/pipelines/4/runs?api-version=7.0"
+)
+PIPELINE_REF: str = cfg("SPINDOWN_PIPELINE_URL", default="refs/head/init_azure_pipeline")
 PIPELINE_TOKEN_KEYVAULT: str = cfg("PIPELINE_TOKEN_KEYVAULT", default="pvarki-shared-kv001")
 PIPELINE_TOKEN_SECRETNAME: str = cfg("PIPELINE_TOKEN_SECRETNAME", default="base64encodedsecret")
 INSTRUCTIONS_URL: str = cfg(
