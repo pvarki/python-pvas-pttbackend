@@ -12,3 +12,13 @@ SPINUP_PIPELINE_URL: str = cfg("SPINUP_PIPELINE_URL", default="https://up.exampl
 SPINDOWN_PIPELINE_URL: str = cfg("SPINDOWN_PIPELINE_URL", default="https://down.example.com")
 PIPELINE_TOKEN_KEYVAULT: str = cfg("PIPELINE_TOKEN_KEYVAULT", default="pvarki-shared-kv001")
 PIPELINE_TOKEN_SECRETNAME: str = cfg("PIPELINE_TOKEN_SECRETNAME", default="base64encodedsecret")
+INSTRUCTIONS_URL: str = cfg(
+    "INSTRUCTIONS_URL", default="https://arkipublic.blob.core.windows.net/ohjeet/Kayttoohje-Mumble.pdf"
+)
+TAKORTTI_URL: str = cfg(
+    "TAKORTTI_URL", default="https://arkipublic.blob.core.windows.net/ohjeet/Taisteluajatuskortti_Mumble.pdf"
+)
+DOCTEMPLATE_URL: str = cfg(
+    "DOCTEMPLATE_URL",
+    default="https://arkipublic.blob.core.windows.net/dokumentointi/F02_PVARKI-tuotteen_dokumentointi_MUMBLE.zip",
+)
