@@ -93,6 +93,7 @@ alembic = { version="^1.9", optional=true }
 psycopg2 = { version="^2.9", optional=true }
 azure-identity = "^1.12"
 azure-keyvault-secrets = "^4.6"
+aiohttp = "^3.8"
 
 [tool.poetry.extras]
 migrations = ["alembic", "psycopg2"]
