@@ -43,8 +43,12 @@ class PipeLineClient:
         for_instance.tfinputs = cast(Dict[str, Any], for_instance.tfinputs)
         for param in for_instance.tfinputs.keys():
             post_data["templateParameters"][param.upper()] = for_instance.tfinputs[param]
+        await self.do_post(post_data)
 
+    async def do_post(self, post_data: Dict[str, Any]) -> None:
+        """Do the POST"""
         async with aiohttp.ClientSession(headers=self.default_headers) as session:
+            LOGGER.debug("POSTing {}".format(post_data))
             async with session.post(PIPELINE_URL, json=post_data) as resp:
                 if resp.status != 200:
                     LOGGER.error("Failure response {}".format(resp))
@@ -68,10 +72,4 @@ class PipeLineClient:
                 "CREATE": False,
             },
         }
-        async with aiohttp.ClientSession(headers=self.default_headers) as session:
-            async with session.post(PIPELINE_URL, json=post_data) as resp:
-                if resp.status != 200:
-                    LOGGER.error("Failure response {}".format(resp))
-                    raise RuntimeError("Pipeline returned failure")
-                json_body = await resp.json()
-                LOGGER.debug("Got response {}".format(json_body))
+        await self.do_post(post_data)
