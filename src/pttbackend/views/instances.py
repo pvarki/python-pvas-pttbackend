@@ -11,6 +11,7 @@ from arkia11napi.security import JWTBearer, check_acl
 
 from ..schemas.instance import DBInstance, InstanceCreate, InstancePager
 from ..models import PTTInstance
+from ..pipelineclient import PipeLineClient
 
 
 LOGGER = logging.getLogger(__name__)
@@ -23,13 +24,26 @@ INSTANCE_ROUTER = APIRouter(dependencies=[Depends(JWTBearer(auto_error=True))])
 async def create_instance(request: Request, pdinstance: InstanceCreate) -> DBInstance:
     """Create a new PTTInstance"""
     check_acl(request.state.jwt, "fi.pvarki.pttbackend.instance:create")
-    pttinstance = PTTInstance(**pdinstance.dict())
+    data = pdinstance.dict()
+    max_users = data.pop("max_users")
+    pttinstance = PTTInstance(**data)
+    pttinstance.tfinputs = {
+        "max_users": max_users,
+    }
+    callback_url = request.url_for("tf_callback", pkstr=str(pttinstance.pk))
     await pttinstance.create()
     refresh = await PTTInstance.get(pttinstance.pk)
+    client = PipeLineClient()
+    try:
+        await client.create(pttinstance, callback_url)
+    except Exception as exc:
+        LOGGER.exception("Could not trigger pipeline {}".format(exc))
+        # Do not leave stuff laying around
+        await refresh.delete()
+        raise
     if not check_acl(request.state.jwt, "fi.pvarki.pttbackend.tfdata:read", auto_error=False):
         refresh.tfinputs = None
         refresh.tfoutputs = None
-    # FIXME: Trigger pipeline for terraform apply
     return DBInstance.parse_obj(refresh.to_dict())
 
 
@@ -79,5 +93,10 @@ async def delete_instance(request: Request, pkstr: str) -> None:
     if not check_acl(request.state.jwt, "fi.pvarki.pttbackend.instance:read", auto_error=False):
         if instance.ownerid != request.state.jwt["userid"]:
             raise HTTPException(status_code=403, detail="Required privilege not granted.")
-    # FIXME: Trigger pipeline for terraform destroy
+    client = PipeLineClient()
+    try:
+        await client.delete(instance)
+    except Exception as exc:
+        LOGGER.exception("Could not trigger pipeline {}".format(exc))
+        raise
     await instance.update(deleted=pendulum.now("UTC")).apply()

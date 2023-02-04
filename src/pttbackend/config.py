@@ -14,6 +14,7 @@ PIPELINE_URL: str = cfg(
 PIPELINE_REF: str = cfg("SPINDOWN_PIPELINE_URL", default="refs/head/init_azure_pipeline")
 PIPELINE_TOKEN_KEYVAULT: str = cfg("PIPELINE_TOKEN_KEYVAULT", default="pvarki-shared-kv001")
 PIPELINE_TOKEN_SECRETNAME: str = cfg("PIPELINE_TOKEN_SECRETNAME", default="base64encodedsecret")
+PIPELINE_SSHKEY_SECRETNAME: str = cfg("PIPELINE_SSHKEY_SECRETNAME", default="sshpubkey")
 INSTRUCTIONS_URL: str = cfg(
     "INSTRUCTIONS_URL", default="https://arkipublic.blob.core.windows.net/ohjeet/Kayttoohje-Mumble.pdf"
 )

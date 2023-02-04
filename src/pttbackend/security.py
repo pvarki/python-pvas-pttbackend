@@ -8,7 +8,7 @@ from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 
 
-from .config import PIPELINE_TOKEN_KEYVAULT, PIPELINE_TOKEN_SECRETNAME
+from .config import PIPELINE_TOKEN_KEYVAULT, PIPELINE_TOKEN_SECRETNAME, PIPELINE_SSHKEY_SECRETNAME
 
 
 LOGGER = logging.getLogger(__name__)
@@ -19,6 +19,7 @@ class PipelineTokens:
     """Wrap the secret fetch to a singleton pattern"""
 
     bearer: Optional[str] = field(default=None, repr=False)
+    ssh_pub: Optional[str] = field(default=None, repr=False)
 
     kvuri: str = field(default=f"https://{PIPELINE_TOKEN_KEYVAULT}.vault.azure.net")
     _credentials: DefaultAzureCredential = field(default_factory=DefaultAzureCredential)
@@ -29,6 +30,8 @@ class PipelineTokens:
         self._client = SecretClient(vault_url=self.kvuri, credential=self._credentials)
         secret = self._client.get_secret(PIPELINE_TOKEN_SECRETNAME)
         self.bearer = secret.value
+        secret = self._client.get_secret(PIPELINE_SSHKEY_SECRETNAME)
+        self.ssh_pub = secret.value
 
     @classmethod
     def singleton(cls, **kwargs: Any) -> "PipelineTokens":
