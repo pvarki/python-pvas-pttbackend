@@ -48,6 +48,7 @@ RUN apk add --no-cache \
         tini \
         openssh-client \
         cargo \
+        libpq-dev \
     # githublab ssh
     && mkdir -p -m 0700 ~/.ssh && ssh-keyscan gitlab.com github.com | sort > ~/.ssh/known_hosts \
     # Installing `poetry` package manager:
@@ -100,6 +101,7 @@ WORKDIR /app
 RUN --mount=type=ssh apk add --no-cache \
         bash \
         tini \
+        git \
     && chmod a+x /docker-entrypoint.sh \
     && WHEELFILE=`echo /tmp/wheelhouse/pttbackend-*.whl` \
     && pip3 install --find-links=/tmp/wheelhouse/ "$WHEELFILE"[all] \
@@ -114,7 +116,7 @@ ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 ##############
 FROM production as migrations
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
-COPY ./docker/entrypoint-alembic.sh.sh /docker-entrypoint-alembic.sh
+COPY ./docker/entrypoint-alembic.sh /docker-entrypoint-alembic.sh
 COPY ./alembic.ini /app/
 COPY ./alembic /app/alembic
 RUN --mount=type=ssh apk add --no-cache \

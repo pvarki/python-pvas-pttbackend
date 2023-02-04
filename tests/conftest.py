@@ -10,9 +10,9 @@ import sqlalchemy
 from asyncpg.exceptions import DuplicateSchemaError
 from libadvian.logging import init_logging
 from arkia11nmodels.testhelpers import monkeysession  # pylint: disable=W0611 ; # false positive
+from arkia11napi.security import JWTHandler
 
 import pttbackend.security
-from pttbackend.security import JWTHandler
 from pttbackend.api import WRAPPER
 from pttbackend import models
 

@@ -47,6 +47,7 @@ RUN apt-get update && apt-get install -y \
         tini \
         openssh-client \
         cargo \
+        libpq-dev \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
     # githublab ssh
@@ -118,7 +119,7 @@ ENTRYPOINT ["/usr/bin/tini", "--", "/docker-entrypoint.sh"]
 ##############
 FROM production as migrations
 COPY --from=production_build /tmp/wheelhouse /tmp/wheelhouse
-COPY ./docker/entrypoint-alembic.sh.sh /docker-entrypoint-alembic.sh
+COPY ./docker/entrypoint-alembic.sh /docker-entrypoint-alembic.sh
 COPY ./alembic.ini /app/
 COPY ./alembic /app/alembic
 RUN --mount=type=ssh apt-get update && apt-get install -y \

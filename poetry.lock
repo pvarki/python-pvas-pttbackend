@@ -208,7 +208,7 @@ uvicorn = {version = "^0.20", extras = ["standard"]}
 type = "git"
 url = "https://github.com/PVARKI-projekti/python-pvas-arkia11napi.git"
 reference = "rambo"
-resolved_reference = "283a4589e3a7e3c6f7e6cd534c482ce5632d48bf"
+resolved_reference = "29f97d8fcea01ea0663ef714c7c9d9f6341f7d7e"
 
 [[package]]
 name = "arkia11nmodels"

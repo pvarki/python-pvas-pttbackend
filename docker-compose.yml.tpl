@@ -10,6 +10,7 @@ x-dbconfig_env: &dbconfig_env
 
 
 x-jwtconfig_env: &jwtconfig_env
+  JWT_PRIVKEY_PATH: "0"
   JWT_PUBKEY_PATH: "/app/jwtRS256.pub"
 
 
@@ -88,7 +89,7 @@ services:
       - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "$PWD/traefik.toml:/etc/traefik/traefik.toml"
+      - "./traefik.toml:/etc/traefik/traefik.toml"
 
 networks:
   dbnet:
