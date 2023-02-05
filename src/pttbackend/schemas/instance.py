@@ -17,7 +17,7 @@ class InstanceCreate(CreateBase):
     """Create PTTInstance objects"""
 
     ownerid: str = Field(description="Who owns this, usually should point to 'userid' in JWT")
-    color: str = Field(description="Color of this deployment, HTML RGB code")
+    color: str = Field(description="Color of this deployment, HTML 6-character RGB code #rrggbb, no alpha")
     grouping: Optional[str] = Field(description="Arbitrary string to group deployments by", nullable=True, default=None)
     max_users: int = Field(description="How many max users will the instance be created for", default=500)
 

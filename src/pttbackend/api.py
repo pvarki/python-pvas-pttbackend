@@ -25,9 +25,7 @@ APP.include_router(INSTANCE_ROUTER)
 WRAPPER = DBWrapper(gino=models.db)
 WRAPPER.init_app(APP)
 
-# init_logging(LOG_LEVEL)
-_ = LOG_LEVEL
-init_logging(logging.DEBUG)
+init_logging(LOG_LEVEL)
 
 
 @APP.get("/api/v1", tags=["misc"])
