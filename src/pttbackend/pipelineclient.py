@@ -48,10 +48,15 @@ class PipeLineClient:
     async def do_post(self, post_data: Dict[str, Any]) -> None:
         """Do the POST"""
         async with aiohttp.ClientSession(headers=self.default_headers) as session:
+            LOGGER.debug("session.headers {}".format(session.headers))
             LOGGER.debug("POSTing {}".format(post_data))
+            LOGGER.debug("to {}".format(PIPELINE_URL))
             async with session.post(PIPELINE_URL, json=post_data) as resp:
                 if resp.status != 200:
                     LOGGER.error("Failure response {}".format(resp))
+                    if resp.status == 400:
+                        json_body = await resp.json()
+                        LOGGER.info("Got response {}".format(json_body))
                     raise RuntimeError("Pipeline returned failure")
                 json_body = await resp.json()
                 LOGGER.debug("Got response {}".format(json_body))

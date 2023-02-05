@@ -9,9 +9,12 @@ x-dbconfig_env: &dbconfig_env
   DB_PORT: &dbport 5432
 
 
-x-jwtconfig_env: &jwtconfig_env
+x-security_env: &security_env
   JWT_PRIVKEY_PATH: "0"
   JWT_PUBKEY_PATH: "/app/jwtRS256.pub"
+  # Use these while we cannot use security principals to access the keyvauls
+  PIPELINE_SSHKEY_OVERRIDE: "{{getenv "PIPELINE_SSHKEY_OVERRIDE" ""}}"
+  PIPELINE_TOKEN_OVERRIDE: "{{getenv "PIPELINE_TOKEN_OVERRIDE" ""}}"
 
 
 services:
@@ -60,7 +63,7 @@ services:
       target: production
     environment:
       <<: *dbconfig_env
-      <<: *jwtconfig_env
+      <<: *security_env
     volumes:
       - {{.Env.JWT_PUBKEY_PATH}}:/app/jwtRS256.pub
     depends_on:
@@ -90,10 +93,13 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik.toml:/etc/traefik/traefik.toml"
+      - "le_data:/letsencrypt"
 
 networks:
   dbnet:
 
 volumes:
+  le_data:
+    driver: local
   db_data:
     driver: local

@@ -8,7 +8,13 @@ from azure.keyvault.secrets import SecretClient
 from azure.identity import DefaultAzureCredential
 
 
-from .config import PIPELINE_TOKEN_KEYVAULT, PIPELINE_TOKEN_SECRETNAME, PIPELINE_SSHKEY_SECRETNAME
+from .config import (
+    PIPELINE_TOKEN_KEYVAULT,
+    PIPELINE_TOKEN_SECRETNAME,
+    PIPELINE_SSHKEY_SECRETNAME,
+    PIPELINE_SSHKEY_OVERRIDE,
+    PIPELINE_TOKEN_OVERRIDE,
+)
 
 
 LOGGER = logging.getLogger(__name__)
@@ -28,10 +34,16 @@ class PipelineTokens:
     def __post_init__(self) -> None:
         """Fetch the keys here"""
         self._client = SecretClient(vault_url=self.kvuri, credential=self._credentials)
-        secret = self._client.get_secret(PIPELINE_TOKEN_SECRETNAME)
-        self.bearer = secret.value
-        secret = self._client.get_secret(PIPELINE_SSHKEY_SECRETNAME)
-        self.ssh_pub = secret.value
+        if PIPELINE_TOKEN_OVERRIDE:
+            self.bearer = PIPELINE_TOKEN_OVERRIDE
+        else:
+            secret = self._client.get_secret(PIPELINE_TOKEN_SECRETNAME)
+            self.bearer = secret.value
+        if PIPELINE_SSHKEY_OVERRIDE:
+            self.ssh_pub = PIPELINE_SSHKEY_OVERRIDE
+        else:
+            secret = self._client.get_secret(PIPELINE_SSHKEY_SECRETNAME)
+            self.ssh_pub = secret.value
 
     @classmethod
     def singleton(cls, **kwargs: Any) -> "PipelineTokens":

@@ -1,6 +1,7 @@
 """PTTInstance related endpoints"""
 from typing import List
 import logging
+import uuid
 
 import pendulum
 from fastapi import APIRouter, Depends, Request, HTTPException
@@ -28,8 +29,10 @@ async def create_instance(request: Request, pdinstance: InstanceCreate) -> DBIns
     max_users = data.pop("max_users")
     pttinstance = PTTInstance(**data)
     pttinstance.tfinputs = {
-        "max_users": max_users,
+        "mumble_users": max_users,
     }
+    if not pttinstance.pk:
+        pttinstance.pk = uuid.uuid4()  # type: ignore
     callback_url = request.url_for("tf_callback", pkstr=str(pttinstance.pk))
     await pttinstance.create()
     refresh = await PTTInstance.get(pttinstance.pk)
