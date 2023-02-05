@@ -86,7 +86,9 @@ async def get_instance(request: Request, pkstr: str) -> DBInstance:
     if not check_acl(request.state.jwt, "fi.pvarki.pttbackend.tfdata:read", auto_error=False):
         instance.tfinputs = None
         instance.tfoutputs = None
-    return DBInstance.parse_obj(instance.to_dict())
+    ret = DBInstance.parse_obj(instance.to_dict())
+    ret.max_users = instance.tfinputs.get("mumble_users", None)
+    return ret
 
 
 @INSTANCE_ROUTER.delete("/api/v1/ptt/instances/{pkstr}", tags=["ptt-instances"], status_code=status.HTTP_204_NO_CONTENT)
