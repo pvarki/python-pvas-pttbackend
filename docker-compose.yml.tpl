@@ -94,11 +94,14 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik.toml:/etc/traefik/traefik.toml"
       - "le_data:/letsencrypt"
+      - "acme_data:/etc/traefik/acme"
 
 networks:
   dbnet:
 
 volumes:
+  acme_data:
+    driver: local
   le_data:
     driver: local
   db_data:
