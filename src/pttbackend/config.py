@@ -28,3 +28,4 @@ DOCTEMPLATE_URL: str = cfg(
 )
 PIPELINE_SSHKEY_OVERRIDE: Optional[str] = cfg("PIPELINE_SSHKEY_OVERRIDE", default=None)
 PIPELINE_TOKEN_OVERRIDE: Optional[str] = cfg("PIPELINE_TOKEN_OVERRIDE", default=None)
+PIPELINE_SUPPRESS: bool = cfg("PIPELINE_SUPPRESS", default=False, cast=bool)

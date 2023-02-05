@@ -7,7 +7,7 @@ import aiohttp
 
 from .models import PTTInstance
 from .security import PipelineTokens
-from .config import PIPELINE_REF, PIPELINE_URL
+from .config import PIPELINE_REF, PIPELINE_URL, PIPELINE_SUPPRESS
 
 LOGGER = logging.getLogger(__name__)
 
@@ -47,6 +47,9 @@ class PipeLineClient:
 
     async def do_post(self, post_data: Dict[str, Any]) -> None:
         """Do the POST"""
+        if PIPELINE_SUPPRESS:
+            LOGGER.warning("Pipeline runs supressed by config")
+            return
         async with aiohttp.ClientSession(headers=self.default_headers) as session:
             LOGGER.debug("session.headers {}".format(session.headers))
             LOGGER.debug("POSTing {}".format(post_data))
