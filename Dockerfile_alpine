@@ -104,7 +104,7 @@ RUN --mount=type=ssh apk add --no-cache \
         git \
     && chmod a+x /docker-entrypoint.sh \
     && WHEELFILE=`echo /tmp/wheelhouse/pttbackend-*.whl` \
-    && pip3 install --find-links=/tmp/wheelhouse/ "$WHEELFILE"[all] \
+    && pip3 install --find-links=/tmp/wheelhouse/ "$WHEELFILE" \
     && rm -rf /tmp/wheelhouse/ \
     # Do whatever else you need to
     && true
