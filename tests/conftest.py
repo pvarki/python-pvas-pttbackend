@@ -10,9 +10,8 @@ import sqlalchemy
 from asyncpg.exceptions import DuplicateSchemaError
 from libadvian.logging import init_logging
 from arkia11nmodels.testhelpers import monkeysession  # pylint: disable=W0611 ; # false positive
-from arkia11napi.security import JWTHandler
+import arkia11napi.security
 
-import pttbackend.security
 from pttbackend.api import WRAPPER
 from pttbackend import models
 
@@ -87,13 +86,13 @@ async def bind_and_create_all() -> None:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def jwt_issuer(monkeysession: Any) -> Generator[JWTHandler, None, None]:
+def jwt_issuer(monkeysession: Any) -> Generator[arkia11napi.security.JWTHandler, None, None]:
     """Monkeypatch env with correct JWT keys and re-init the singleton"""
     monkeysession.setenv("JWT_PRIVKEY_PATH", str(DATA_PATH / "jwtRS256.key"))
     monkeysession.setenv("JWT_PUBKEY_PATH", str(DATA_PATH / "jwtRS256.pub"))
     monkeysession.setenv("JWT_PRIVKEY_PASS", "Disparate-Letdown-Pectin-Natural")  # pragma: allowlist secret
     monkeysession.setenv("JWT_COOKIE_SECURE", "0")
     monkeysession.setenv("JWT_COOKIE_DOMAIN", "")
-    monkeysession.setattr(pttbackend.security, "HDL_SINGLETON", JWTHandler())
-    singleton = JWTHandler.singleton()
+    monkeysession.setattr(arkia11napi.security, "HDL_SINGLETON", arkia11napi.security.JWTHandler())
+    singleton = arkia11napi.security.JWTHandler.singleton()
     yield singleton
