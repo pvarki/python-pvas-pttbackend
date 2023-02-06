@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pttbackend"
-version = "0.1.0"
+version = "1.0.0"
 description = "Keeps track of mumble instances ordered by people in different contexts"
 authors = ["Eero af Heurlin <eero.afheurlin@iki.fi>"]
 homepage = "https://gitlab.com/PVARKI-projekti/python-pvas-pttbackend/"
