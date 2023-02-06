@@ -207,8 +207,8 @@ uvicorn = {version = "^0.20", extras = ["standard"]}
 [package.source]
 type = "git"
 url = "https://github.com/pvarki/python-pvas-arkia11napi.git"
-reference = "rambo"
-resolved_reference = "3901b2d7106ce982ea7cadd98636ae05d22c97bd"
+reference = "1.0.0"
+resolved_reference = "a200761a5b6a98741afbba70f63ce90ed3e46b77"
 
 [[package]]
 name = "arkia11nmodels"
@@ -3027,4 +3027,4 @@ migrations = ["alembic", "psycopg2"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"  # fastapi-mail depends on 3.8.1 as min and arkia11napi depends on it
-content-hash = "5c9db75251e88d23b1afcd42715747fb831106994606a984e5ef6d8b5424c045"
+content-hash = "006a5dbb5636ec12c166d17750c2919ab925ea3935fa3b753897951674e8b25e"
