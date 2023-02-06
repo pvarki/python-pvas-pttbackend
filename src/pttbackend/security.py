@@ -28,21 +28,31 @@ class PipelineTokens:
     ssh_pub: Optional[str] = field(default=None, repr=False)
 
     kvuri: str = field(default=f"https://{PIPELINE_TOKEN_KEYVAULT}.vault.azure.net")
-    _credentials: DefaultAzureCredential = field(default_factory=DefaultAzureCredential)
+    _credentials: DefaultAzureCredential = field(init=False, repr=False)
     _client: SecretClient = field(init=False, repr=False)
+
+    @property
+    def client(self) -> SecretClient:
+        """Init the client or return"""
+        try:
+            return self._client
+        except AttributeError:
+            pass
+        self._credentials = DefaultAzureCredential()
+        self._client = SecretClient(vault_url=self.kvuri, credential=self._credentials)
+        return self._client
 
     def __post_init__(self) -> None:
         """Fetch the keys here"""
-        self._client = SecretClient(vault_url=self.kvuri, credential=self._credentials)
         if PIPELINE_TOKEN_OVERRIDE:
             self.bearer = PIPELINE_TOKEN_OVERRIDE
         else:
-            secret = self._client.get_secret(PIPELINE_TOKEN_SECRETNAME)
+            secret = self.client.get_secret(PIPELINE_TOKEN_SECRETNAME)
             self.bearer = secret.value
         if PIPELINE_SSHKEY_OVERRIDE:
             self.ssh_pub = PIPELINE_SSHKEY_OVERRIDE
         else:
-            secret = self._client.get_secret(PIPELINE_SSHKEY_SECRETNAME)
+            secret = self.client.get_secret(PIPELINE_SSHKEY_SECRETNAME)
             self.ssh_pub = secret.value
 
     @classmethod

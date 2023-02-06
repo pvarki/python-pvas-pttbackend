@@ -34,8 +34,10 @@ async def create_instance(request: Request, pdinstance: InstanceCreate) -> DBIns
     pttinstance.tfinputs = {
         "mumble_users": max_users,
     }
+    # pylint: disable=invalid-name
     if not pttinstance.pk:
         pttinstance.pk = uuid.uuid4()  # type: ignore
+    # pylint: enable=invalid-name
     callback_url = request.url_for("tf_callback", pkstr=str(pttinstance.pk))
     await pttinstance.create()
     refresh = await PTTInstance.get(pttinstance.pk)
@@ -68,9 +70,13 @@ async def list_instances(request: Request) -> InstancePager:
 
     pdinstances: List[DBInstance] = []
     for instance in instances:
-        instance.tfinputs = None
-        instance.tfoutputs = None
-        pdinstances.append(DBInstance.parse_obj(instance.to_dict()))
+        pdinst = DBInstance.parse_obj(instance.to_dict())
+        pdinst.tfoutputs = None
+        pdinst.tfinputs = None
+        pdinst.max_users = instance.tfinputs.get("mumble_users", None)
+        if instance.tfcompleted or instance.tfoutputs:
+            pdinst.enduser_instructions = request.url_for("enduser_instructions", pkstr=str(instance.pk))
+        pdinstances.append(pdinst)
 
     return InstancePager(
         count=len(pdinstances),
@@ -86,11 +92,14 @@ async def get_instance(request: Request, pkstr: str) -> DBInstance:
         if instance.ownerid != request.state.jwt["userid"]:
             raise HTTPException(status_code=403, detail="Required privilege not granted.")
 
-    if not check_acl(request.state.jwt, "fi.pvarki.pttbackend.tfdata:read", auto_error=False):
-        instance.tfinputs = None
-        instance.tfoutputs = None
     ret = DBInstance.parse_obj(instance.to_dict())
+    if not check_acl(request.state.jwt, "fi.pvarki.pttbackend.tfdata:read", auto_error=False):
+        ret.tfinputs = None
+        ret.tfoutputs = None
     ret.max_users = instance.tfinputs.get("mumble_users", None)
+    if instance.tfcompleted or instance.tfoutputs:
+        ret.enduser_instructions = request.url_for("enduser_instructions", pkstr=str(instance.pk))
+
     return ret
 
 

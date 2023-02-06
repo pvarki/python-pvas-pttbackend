@@ -14,8 +14,10 @@ x-dbconfig_env: &dbconfig_env
 x-security_env: &security_env
   JWT_PRIVKEY_PATH: "0"
   JWT_PUBKEY_PATH: "/app/jwtRS256.pub"
-  # Use these while we cannot use security principals to access the keyvauls
+  # Do not call the pipelines from local testing
   PIPELINE_SUPPRESS: 1
+  PIPELINE_SSHKEY_OVERRIDE: "nokey"  # we need to define these or the keyvault client will throw exception
+  PIPELINE_TOKEN_OVERRIDE: "notoken"  # we need to define these or the keyvault client will throw exception
 
 services:
   db:

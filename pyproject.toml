@@ -67,7 +67,7 @@ max-line-length = 120
 max-parents = 10
 
 [tool.pylint.messages_control]
-disable=["fixme", "W1202", "C0330", "C0209"]
+disable=["fixme", "W1202", "C0209"]
 
 [tool.pylint.similarities]
 min-similarity-lines = 8
