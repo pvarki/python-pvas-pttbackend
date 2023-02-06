@@ -20,6 +20,6 @@
 
 [certificatesResolvers.letsencrypt.acme]
   email = "{{.Env.CERTBOT_EMAIL}}"
-  storage= "acme.json"
+  storage= "/etc/traefik/acme/acme.json"
   [certificatesResolvers.letsencrypt.acme.httpChallenge]
     entryPoint = "web"
