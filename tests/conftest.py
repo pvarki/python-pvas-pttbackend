@@ -14,6 +14,7 @@ import arkia11napi.security
 
 from pttbackend.api import WRAPPER
 from pttbackend import models
+from pttbackend import config
 
 # pylint: disable=W0621
 init_logging(logging.DEBUG)
@@ -93,6 +94,8 @@ def jwt_issuer(monkeysession: Any) -> Generator[arkia11napi.security.JWTHandler,
     monkeysession.setenv("JWT_PRIVKEY_PASS", "Disparate-Letdown-Pectin-Natural")  # pragma: allowlist secret
     monkeysession.setenv("JWT_COOKIE_SECURE", "0")
     monkeysession.setenv("JWT_COOKIE_DOMAIN", "")
+    monkeysession.setenv("PIPELINE_SUPPRESS", "1")
+    monkeysession.setattr(config, "PIPELINE_SUPPRESS", True)
     monkeysession.setattr(arkia11napi.security, "HDL_SINGLETON", arkia11napi.security.JWTHandler())
     singleton = arkia11napi.security.JWTHandler.singleton()
     yield singleton
