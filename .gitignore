@@ -1,6 +1,10 @@
 # IDE settings
 .idea
 
+# keys
+*.pub
+*.key
+
 # ci artefacts
 pytest*.xml
 

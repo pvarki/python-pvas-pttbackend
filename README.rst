@@ -11,7 +11,12 @@ Docker
 For more controlled deployments and to get rid of "works on my computer" -syndrome, we always
 make sure our software works under docker.
 
-It's also a quick way to get started with a standard development environment.
+It's also a quick way to get started with a standard development environment::
+
+    docker-compose -p pttbackend -f docker-compose_local.yml -f docker-compose_local_reload.yml up
+
+Note that you need jwt.pub from the a11napi instance you're using to get your auth tokens (/api/v1/tokens/pubkey)
+
 
 SSH agent forwarding
 ^^^^^^^^^^^^^^^^^^^^

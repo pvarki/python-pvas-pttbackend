@@ -193,7 +193,7 @@ files = []
 develop = false
 
 [package.dependencies]
-arkia11nmodels = {git = "https://github.com/PVARKI-projekti/python-pvas-arkia11nmodels.git", tag = "1.0.0"}
+arkia11nmodels = {git = "https://github.com/pvarki/python-pvas-arkia11nmodels.git", tag = "1.0.0"}
 click = "^8.0"
 fastapi = "^0.88"
 fastapi-mail = "^1.2"
@@ -206,9 +206,9 @@ uvicorn = {version = "^0.20", extras = ["standard"]}
 
 [package.source]
 type = "git"
-url = "https://github.com/PVARKI-projekti/python-pvas-arkia11napi.git"
+url = "https://github.com/pvarki/python-pvas-arkia11napi.git"
 reference = "rambo"
-resolved_reference = "29f97d8fcea01ea0663ef714c7c9d9f6341f7d7e"
+resolved_reference = "3901b2d7106ce982ea7cadd98636ae05d22c97bd"
 
 [[package]]
 name = "arkia11nmodels"
@@ -236,7 +236,7 @@ migrations = ["alembic (>=1.9,<2.0)", "psycopg2 (>=2.9,<3.0)"]
 
 [package.source]
 type = "git"
-url = "https://github.com/PVARKI-projekti/python-pvas-arkia11nmodels.git"
+url = "https://github.com/pvarki/python-pvas-arkia11nmodels.git"
 reference = "1.0.0"
 resolved_reference = "fb043f822d8e57954d66d92975369d4d7807aa3d"
 
@@ -3006,14 +3006,14 @@ multidict = ">=4.0"
 
 [[package]]
 name = "zipp"
-version = "3.12.0"
+version = "3.12.1"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "zipp-3.12.0-py3-none-any.whl", hash = "sha256:9eb0a4c5feab9b08871db0d672745b53450d7f26992fd1e4653aa43345e97b86"},
-    {file = "zipp-3.12.0.tar.gz", hash = "sha256:73efd63936398aac78fd92b6f4865190119d6c91b531532e798977ea8dd402eb"},
+    {file = "zipp-3.12.1-py3-none-any.whl", hash = "sha256:6c4fe274b8f85ec73c37a8e4e3fa00df9fb9335da96fb789e3b96b318e5097b3"},
+    {file = "zipp-3.12.1.tar.gz", hash = "sha256:a3cac813d40993596b39ea9e93a18e8a2076d5c378b8bc88ec32ab264e04ad02"},
 ]
 
 [package.extras]
@@ -3027,4 +3027,4 @@ migrations = ["alembic", "psycopg2"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"  # fastapi-mail depends on 3.8.1 as min and arkia11napi depends on it
-content-hash = "e074930c8c3ce7bbba0ffbefe040e5896daae664bf6accc74f9bc9c768e17061"
+content-hash = "5c9db75251e88d23b1afcd42715747fb831106994606a984e5ef6d8b5424c045"
