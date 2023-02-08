@@ -12,6 +12,7 @@ x-dbconfig_env: &dbconfig_env
 x-security_env: &security_env
   JWT_PRIVKEY_PATH: "0"
   JWT_PUBKEY_PATH: "/app/jwtRS256.pub"
+  PIPELINE_TOKEN_KEYVAULT: "{{getenv "PIPELINE_TOKEN_KEYVAULT" "pvarki-shared-kv001"}}"
   # Use these while we cannot use security principals to access the keyvauls
   PIPELINE_SSHKEY_OVERRIDE: "{{getenv "PIPELINE_SSHKEY_OVERRIDE" ""}}"
   PIPELINE_TOKEN_OVERRIDE: "{{getenv "PIPELINE_TOKEN_OVERRIDE" ""}}"
@@ -65,7 +66,7 @@ services:
       <<: *dbconfig_env
       <<: *security_env
     volumes:
-      - {{.Env.JWT_PUBKEY_PATH}}:/app/jwtRS256.pub
+      - {{getenv "HOST_PUBKEY_PATH" "./jwt.pub"}}:/app/jwtRS256.pub
     depends_on:
       db:
         condition: service_healthy
