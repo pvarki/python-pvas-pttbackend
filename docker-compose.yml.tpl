@@ -43,7 +43,7 @@ services:
       - 'db_data:/var/lib/postgresql/data'
 
   dbinit:
-    image: pvarkiprojekti/pttbackend:migrations
+    image: pvarki/pttbackend:migrations
     build:
       context: .
       dockerfile: Dockerfile
@@ -57,7 +57,7 @@ services:
         condition: service_healthy
 
   api:
-    image: pvarkiprojekti/pttbackend:latest
+    image: pvarki/pttbackend:latest
     build:
       context: .
       dockerfile: Dockerfile
