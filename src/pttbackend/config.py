@@ -12,7 +12,7 @@ LOG_LEVEL: int = cfg("LOG_LEVEL", default=20, cast=int)
 PIPELINE_URL: str = cfg(
     "PIPELINE_URL", default="https://dev.azure.com/pvarki/PVARKI/_apis/pipelines/8/runs?api-version=7.0"
 )
-PIPELINE_REF: str = cfg("SPINDOWN_PIPELINE_URL", default="refs/heads/init_azure_pipeline")
+PIPELINE_REF: str = cfg("PIPELINE_REF", default="refs/heads/init_azure_pipeline")
 PIPELINE_TOKEN_KEYVAULT: str = cfg("PIPELINE_TOKEN_KEYVAULT", default="pvarki-shared-kv001")
 PIPELINE_TOKEN_SECRETNAME: str = cfg("PIPELINE_TOKEN_SECRETNAME", default="base64encodedsecret")
 PIPELINE_SSHKEY_SECRETNAME: str = cfg("PIPELINE_SSHKEY_SECRETNAME", default="sshkeypub")
