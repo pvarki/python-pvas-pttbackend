@@ -1,8 +1,8 @@
 """Initial schema and tables
 
-Revision ID: 22ac830c256a
+Revision ID: bd96a4f2b31e
 Revises:
-Create Date: 2023-02-04 19:33:59.836726
+Create Date: 2023-03-03 13:37:23.190828
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "22ac830c256a"
+revision = "bd96a4f2b31e"  # pragma: allowlist secret
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -53,5 +53,7 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_pttbackend_pttinstances_grouping"), table_name="pttinstances", schema="pttbackend")
     op.drop_index(op.f("ix_pttbackend_pttinstances_color"), table_name="pttinstances", schema="pttbackend")
     op.drop_table("pttinstances", schema="pttbackend")
+
     op.execute("drop schema pttbackend")
+
     # ### end Alembic commands ###
