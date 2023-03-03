@@ -1,0 +1,79 @@
+version: '3.7'
+
+# This is for local testing, it has no TLS, local db, emails configured for mailhog etc
+
+# DB config
+x-dbconfig_env: &dbconfig_env
+  DB_HOST: 172.17.0.1  # docker internal ip, we could use links but this way the db can be connected to from the docker host
+  DB_USER: &dbuser postgres
+  DB_DATABASE: &dbname pvarki
+  DB_PASSWORD: &dbpass pvarkipwd  # pragma: allowlist secret
+  DB_PORT: &dbport 58432
+
+
+x-security_env: &security_env
+  JWT_PRIVKEY_PATH: "0"
+  JWT_PUBKEY_PATH: "/app/jwtRS256.pub"
+  # Do not call the pipelines from local testing
+  PIPELINE_SUPPRESS: 1
+  PIPELINE_SSHKEY_OVERRIDE: "nokey"  # we need to define these or the keyvault client will throw exception
+  PIPELINE_TOKEN_OVERRIDE: "notoken"  # we need to define these or the keyvault client will throw exception
+
+services:
+  db:
+    image: postgres:15.1
+    environment:
+      POSTGRES_USER: *dbuser
+      POSTGRES_DB: *dbname
+      POSTGRES_PASSWORD: *dbpass # pragma: allowlist secret
+      LC_COLLATE: "C.UTF-8"
+    ports:
+      - target: 5432
+        published: *dbport
+        protocol: tcp
+        mode: host
+    healthcheck:
+      test: "pg_isready --dbname=$$POSTGRES_DB --username=$$POSTGRES_USER -q"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
+
+  dbinit:
+    image: pvarki/pttbackend:migrations
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrations
+    environment:
+      <<: *dbconfig_env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    image: pvarki/pttbackend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: *dbconfig_env
+      <<: *security_env
+    volumes:
+      - ./jwt.pub:/app/jwtRS256.pub
+    depends_on:
+      db:
+        condition: service_healthy
+      dbinit:
+        condition: service_completed_successfully
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:
+    driver: local

@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:15.1
+    environment:
+      POSTGRES_DB: pptbackendtest
+      POSTGRES_PASSWORD: pptbackendpwd # pragma: allowlist secret
+      LC_COLLATE: "C.UTF-8"
+    ports:
+      - "55432:5432"
+
+# If you want to run a db for manual testing here is a hint
+# docker run -d --name arkipg -p 56432:5432 -e POSTGRES_DB=arki -e POSTGRES_PASSWORD=arkipwd postgres:15.1
+# psql -h localhost -p 56432 -d arki  -U postgres

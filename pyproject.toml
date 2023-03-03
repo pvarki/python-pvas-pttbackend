@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pttbackend"
-version = "0.1.0"
+version = "1.0.0"
 description = "Keeps track of mumble instances ordered by people in different contexts"
 authors = ["Eero af Heurlin <eero.afheurlin@iki.fi>"]
 homepage = "https://gitlab.com/PVARKI-projekti/python-pvas-pttbackend/"
@@ -38,6 +38,28 @@ junit_family="xunit2"
 addopts="--cov=pttbackend --cov-fail-under=65 --cov-branch"
 asyncio_mode="strict"
 
+[tool.mypy]
+strict=true
+
+[[tool.mypy.overrides]]
+module="pttbackend.models.*"  # Gino isn't properly typed yet
+disallow_subclassing_any=false
+
+[[tool.mypy.overrides]]
+module="pttbackend.schemas.*"  # pydantic_collections has issues
+disallow_subclassing_any=false
+
+[[tool.mypy.overrides]]
+module="alembic.*"  # alembic generated stuff is all weird to mypy
+ignore_errors = true
+
+
+[tool.pylint.MASTER]
+ignore-paths = [
+    '^alembic/.*'
+]
+
+
 [tool.pylint.format]
 max-line-length = 120
 
@@ -45,7 +67,7 @@ max-line-length = 120
 max-parents = 10
 
 [tool.pylint.messages_control]
-disable=["fixme", "W1202", "C0330", "C0209"]
+disable=["fixme", "W1202", "C0209"]
 
 [tool.pylint.similarities]
 min-similarity-lines = 8
@@ -56,9 +78,32 @@ omit = ["tests/*"]
 branch = true
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8.1,<4.0"  # fastapi-mail depends on 3.8.1 as min and arkia11napi depends on it
 libadvian = "^1.0"
 click = "^8.0"
+#fastapi = ">=0.89,<1.0"  # caret behaviour on 0.x is to lock to 0.x.*
+fastapi = "^0.88" # 0.89 has a nasty bug
+python-dotenv = ">=0.21,<1.0" # explicitly specify this so pydantic.settings can use it
+uvicorn = {version = "^0.20", extras = ["standard"]}
+gunicorn = "^20.1"
+jinja2 = "^3.1"
+# FIXME: get from our own nexus or similar, also split the stuff we use from here into separate library
+arkia11napi = { git="https://github.com/pvarki/python-pvas-arkia11napi.git", tag="1.0.0"}
+gino = "^1.0"
+starlette = ">=0.22,<1.0"  # caret behaviour on 0.x is to lock to 0.x.*
+sqlalchemy-stubs = "^0.4"
+pendulum = "^2.1"
+pydantic = { version="^1.10", extras=["email"] }
+pydantic-collections = ">=0.4,<1.0"  # caret behaviour on 0.x is to lock to 0.x.*
+alembic = { version="^1.9", optional=true }
+psycopg2 = { version="^2.9", optional=true }
+azure-identity = "^1.12"
+azure-keyvault-secrets = "^4.6"
+aiohttp = "^3.8"
+
+[tool.poetry.extras]
+migrations = ["alembic", "psycopg2"]
+all = ["migrations"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1"
@@ -72,6 +117,11 @@ pre-commit = "^2.17"
 pytest-asyncio = "^0.18"
 bump2version = "^1.0"
 detect-secrets = "^1.2"
+pytest-docker = "^1.0"
+docker-compose = "^1.29"
+# required for development
+alembic = { version="^1.9", optional=false }
+psycopg2 = { version="^2.9", optional=false }
 
 [build-system]
 requires = ["poetry-core>=1.2.0"]
